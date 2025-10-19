@@ -56,11 +56,11 @@ const PetsEmergency = () => {
   return (
     <div className="animate-fadeIn">
       {/* Section Header */}
-      <div className="flex items-center mb-8">
-        <div className="text-2xl mr-3">🐾</div>
+      <div className="flex items-center mb-6 sm:mb-8">
+        <div className="text-xl sm:text-2xl mr-2 sm:mr-3">🐾</div>
         <div>
-          <h2 className="text-2xl font-bold text-gray-800">Pets & Emergency Contact</h2>
-          <p className="text-gray-500">Pet information and emergency contact details</p>
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-800">Pets & Emergency Contact</h2>
+          <p className="text-gray-500 text-sm sm:text-base">Pet information and emergency contact details</p>
         </div>
       </div>
 
@@ -94,7 +94,7 @@ const PetsEmergency = () => {
                   </button>
                 </div>
                 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Pet Name</label>
                     <input
@@ -177,7 +177,7 @@ const PetsEmergency = () => {
       <div className="border-t border-gray-200 pt-8">
         <h3 className="text-lg font-semibold text-gray-800 mb-6">Emergency Contact</h3>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Emergency Contact Name <span className="text-red-500">*</span>

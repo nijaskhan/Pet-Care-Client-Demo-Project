@@ -16,19 +16,20 @@ const TabNavigation = ({ tabs, activeTab, onTabChange }) => {
 
   return (
     <div className="relative bg-white border-b border-gray-200">
-      <nav ref={navRef} className="flex relative">
+      <nav ref={navRef} className="flex relative overflow-x-auto scrollbar-hide">
         {tabs.map((tab) => (
           <button
             key={tab.id}
             id={`tab-${tab.id}`}
             onClick={() => onTabChange(tab.id)}
-            className={`px-6 py-4 text-sm font-medium transition-all duration-200 ${activeTab === tab.id
+            className={`flex-shrink-0 px-3 sm:px-4 lg:px-6 py-3 sm:py-4 text-xs sm:text-sm font-medium transition-all duration-200 whitespace-nowrap ${activeTab === tab.id
                 ? 'text-blue-600'
                 : 'text-gray-600 hover:text-gray-800 hover:bg-gray-50'
               }`}
           >
-            <span className="mr-2">{tab.icon}</span>
-            {tab.label}
+            <span className="mr-1 sm:mr-2 text-sm sm:text-base">{tab.icon}</span>
+            <span className="hidden xs:inline">{tab.label}</span>
+            <span className="xs:hidden">{tab.label.split(' ')[0]}</span>
           </button>
         ))}
 

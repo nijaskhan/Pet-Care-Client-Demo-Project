@@ -21,11 +21,11 @@ const Preferences = () => {
     return (
         <div className="animate-fadeIn">
             {/* Section Header */}
-            <div className="flex items-center mb-8">
-                <div className="text-2xl mr-3">⚙️</div>
+            <div className="flex items-center mb-6 sm:mb-8">
+                <div className="text-xl sm:text-2xl mr-2 sm:mr-3">⚙️</div>
                 <div>
-                    <h2 className="text-2xl font-bold text-gray-800">Client Preferences</h2>
-                    <p className="text-gray-500">Communication and service preferences</p>
+                    <h2 className="text-xl sm:text-2xl font-bold text-gray-800">Client Preferences</h2>
+                    <p className="text-gray-500 text-sm sm:text-base">Communication and service preferences</p>
                 </div>
             </div>
 

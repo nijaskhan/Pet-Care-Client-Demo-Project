@@ -71,40 +71,41 @@ const ClientPreview = () => {
       {/* Header */}
       <div className="bg-white shadow-sm border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            <div className="flex items-center">
+          <div className="flex flex-col sm:flex-row items-center justify-between py-4 sm:py-0 sm:h-16 gap-4 sm:gap-0">
+            <div className="flex items-center order-2 sm:order-1">
               <button
                 onClick={() => navigate('/')}
-                className="flex items-center text-gray-600 hover:text-gray-900 transition-colors duration-200"
+                className="flex items-center text-gray-600 hover:text-gray-900 transition-colors duration-200 text-sm sm:text-base"
               >
-                <ArrowLeftIcon className="h-5 w-5 mr-2" />
-                Back to Form
+                <ArrowLeftIcon className="h-4 w-4 sm:h-5 sm:w-5 mr-2" />
+                <span className="hidden sm:inline">Back to Form</span>
+                <span className="sm:hidden">Back</span>
               </button>
             </div>
-            <div className="flex items-center">
-              <h1 className="text-xl font-semibold text-gray-900">Client Preview</h1>
+            <div className="flex items-center order-1 sm:order-2">
+              <h1 className="text-lg sm:text-xl font-semibold text-gray-900">Client Preview</h1>
             </div>
-            <div className="flex items-center">
-              <span className="text-sm text-gray-500">ID: {id}</span>
+            <div className="flex items-center order-3">
+              <span className="text-xs sm:text-sm text-gray-500">ID: {id}</span>
             </div>
           </div>
         </div>
       </div>
 
       {/* Content */}
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-4xl mx-auto px-2 sm:px-4 lg:px-8 py-4 sm:py-6 lg:py-8">
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
           {/* Basic Information */}
-          <div className="px-6 py-8 border-b border-gray-200">
-            <div className="flex items-center mb-6">
-              <div className="text-2xl mr-3">👤</div>
+          <div className="px-4 sm:px-6 py-6 sm:py-8 border-b border-gray-200">
+            <div className="flex items-center mb-4 sm:mb-6">
+              <div className="text-xl sm:text-2xl mr-2 sm:mr-3">👤</div>
               <div>
-                <h2 className="text-2xl font-bold text-gray-800">Basic Information</h2>
-                <p className="text-gray-500">Client personal details</p>
+                <h2 className="text-lg sm:text-xl font-bold text-gray-800">Basic Information</h2>
+                <p className="text-gray-500 text-sm sm:text-base">Client personal details</p>
               </div>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Client ID</label>
                 <div className="px-4 py-3 bg-gray-50 rounded-lg border border-gray-200">

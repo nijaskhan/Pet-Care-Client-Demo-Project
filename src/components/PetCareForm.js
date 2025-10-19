@@ -49,7 +49,7 @@ const PetCareForm = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-100 to-blue-50">
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-2 sm:px-4 py-4 sm:py-6 lg:py-8">
         <div className="max-w-6xl mx-auto">
           {/* Header */}
           <Header />
@@ -60,7 +60,7 @@ const PetCareForm = () => {
           />
 
           {/* Main Form Container */}
-          <div className="bg-white rounded-2xl shadow-2xl overflow-hidden">
+          <div className="bg-white rounded-xl sm:rounded-2xl shadow-2xl overflow-hidden">
             {/* Tab Navigation */}
             <TabNavigation
               tabs={tabs}
@@ -69,7 +69,7 @@ const PetCareForm = () => {
             />
 
             {/* Form Content */}
-            <div className="p-8">
+            <div className="p-4 sm:p-6 lg:p-8">
               {renderActiveSection()}
 
               {/* Action Buttons */}

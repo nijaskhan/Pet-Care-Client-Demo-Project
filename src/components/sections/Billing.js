@@ -13,16 +13,16 @@ const Billing = () => {
   return (
     <div className="animate-fadeIn">
       {/* Section Header */}
-      <div className="flex items-center mb-8">
-        <div className="text-2xl mr-3">💳</div>
+      <div className="flex items-center mb-6 sm:mb-8">
+        <div className="text-xl sm:text-2xl mr-2 sm:mr-3">💳</div>
         <div>
-          <h2 className="text-2xl font-bold text-gray-800">Billing Information</h2>
-          <p className="text-gray-500">Payment methods and billing details</p>
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-800">Billing Information</h2>
+          <p className="text-gray-500 text-sm sm:text-base">Payment methods and billing details</p>
         </div>
       </div>
 
       {/* Form Fields */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
         {/* Payment Method */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-2">
