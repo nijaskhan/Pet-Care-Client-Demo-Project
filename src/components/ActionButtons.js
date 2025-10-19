@@ -1,20 +1,34 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { clearForm, validateForm } from '../features/form/formSlice';
-import { useCreateClientMutation } from '../services/petCareApi';
 import { useToast } from './customs/Toast/ToastProvider';
+import Swal from 'sweetalert2';
+import { useCreateClientMutation } from '../services/api/petCareApi';
 
 const ActionButtons = () => {
   const dispatch = useDispatch();
   const { formData, isLoading, validationErrors, isFormValid } = useSelector((state) => state.form);
-  const [createClient, { isLoading: isCreating }] = useCreateClientMutation();
   const { showSuccess, showError, showWarning } = useToast();
+  const [createClient, { isLoading: isCreating }] = useCreateClientMutation();
 
   const handleClearForm = () => {
-    if (window.confirm('Are you sure you want to clear the form? This action cannot be undone.')) {
-      dispatch(clearForm());
-      showSuccess('Form cleared successfully!');
-    }
+    Swal.fire({
+      title: "Clear Form?",
+      text: "Are you sure you want to clear the form? This action cannot be undone.",
+      icon: "warning",
+      showCancelButton: true,
+      reverseButtons: true,
+      confirmButtonColor: "#ef4444",
+      cancelButtonColor: "#6b7280",
+      confirmButtonText: "Yes, Clear Form!",
+      cancelButtonText: "Cancel",
+      draggable: true
+    }).then((result) => {
+      if (result.isConfirmed) {
+        dispatch(clearForm());
+        showSuccess('Form cleared successfully!');
+      }
+    });
   };
 
   const handleSaveAsDraft = () => {
@@ -31,17 +45,14 @@ const ActionButtons = () => {
 
   const handleSaveClientRecord = async () => {
     try {
-      // Validate form first
       dispatch(validateForm());
-      
-      // Check if form is valid
+
       if (!isFormValid) {
         // const errorCount = Object.keys(validationErrors).length;
         showError(`Please fill in the required fields to continue.`);
         return;
       }
 
-      // Transform form data for API
       const clientData = {
         name: formData.basic.fullName,
         username: formData.basic.preferredName || formData.basic.fullName,
@@ -60,9 +71,36 @@ const ActionButtons = () => {
         },
       };
 
-      await createClient(clientData).unwrap();
-      showSuccess('Client record saved successfully!');
-      dispatch(clearForm());
+      try {
+        await createClient(clientData).unwrap();
+
+        Swal.fire({
+          title: "Record Added!",
+          text: "Record is added, click here to show the preview",
+          icon: "success",
+          showCancelButton: true,
+          reverseButtons: true,
+          confirmButtonText: "Show Preview",
+          cancelButtonText: "Close",
+          confirmButtonColor: "#3b82f6",
+          cancelButtonColor: "#6b7280",
+          draggable: true
+        }).then((result) => {
+          if (result.isConfirmed) {
+            handlePreview();
+          }
+        });
+
+        dispatch(clearForm());
+      } catch (err) {
+        Swal.fire({
+          title: "Client Registration Failed",
+          text: "An error occurred while registering the client. Please try again.",
+          icon: "error",
+          confirmButtonText: "OK",
+          confirmButtonColor: "#e84141"
+        });
+      }
     } catch (error) {
       console.error('Error saving client:', error);
       showError('Error saving client record. Please try again.');

@@ -3,7 +3,7 @@ import { updateFormData, addPet, removePet } from '../../features/form/formSlice
 
 const PetsEmergency = () => {
   const dispatch = useDispatch();
-  const { formData } = useSelector((state) => state.form);
+  const { formData, validationErrors } = useSelector((state) => state.form);
   const { pets } = formData;
 
   const handleInputChange = (field, value) => {
@@ -39,6 +39,18 @@ const PetsEmergency = () => {
 
   const handleRemovePet = (petIndex) => {
     dispatch(removePet(petIndex));
+  };
+
+  const getFieldError = (field) => {
+    return validationErrors[`pets.emergencyContact.${field}`];
+  };
+
+  const getInputClasses = (field) => {
+    const baseClasses = "w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200";
+    const errorClasses = "border-red-500 focus:ring-red-500";
+    const normalClasses = "border-gray-300";
+    
+    return `${baseClasses} ${getFieldError(field) ? errorClasses : normalClasses}`;
   };
 
   return (
@@ -174,9 +186,12 @@ const PetsEmergency = () => {
               type="text"
               value={pets.emergencyContact.name}
               onChange={(e) => handleEmergencyContactChange('name', e.target.value)}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+              className={getInputClasses('name')}
               placeholder="John Doe"
             />
+            {getFieldError('name') && (
+              <p className="mt-1 text-sm text-red-600">{getFieldError('name')}</p>
+            )}
           </div>
 
           <div>
@@ -199,10 +214,19 @@ const PetsEmergency = () => {
             <input
               type="tel"
               value={pets.emergencyContact.phone}
-              onChange={(e) => handleEmergencyContactChange('phone', e.target.value)}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+              onChange={(e) => {
+                const numberOnly = e.target.value.replace(/\D/g, '').slice(0, 20);
+                handleEmergencyContactChange('phone', numberOnly);
+              }}
+              className={getInputClasses('phone')}
               placeholder="(555) 987-6543"
+              maxLength={20}
+              inputMode="numeric"
+              pattern="[0-9]*"
             />
+            {getFieldError('phone') && (
+              <p className="mt-1 text-sm text-red-600">{getFieldError('phone')}</p>
+            )}
           </div>
 
           <div>

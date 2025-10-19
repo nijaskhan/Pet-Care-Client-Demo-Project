@@ -1,12 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { petCareApi } from '../services/petCareApi';
 import formSlice from '../features/form/formSlice';
+import { rtkQueryApi } from '../services/rtkQueryApi';
 
 export const store = configureStore({
   reducer: {
     form: formSlice,
-    [petCareApi.reducerPath]: petCareApi.reducer,
+    [rtkQueryApi.reducerPath]: rtkQueryApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(petCareApi.middleware),
+    getDefaultMiddleware().concat(rtkQueryApi.middleware),
 });

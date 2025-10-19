@@ -66,9 +66,15 @@ const Contact = () => {
           <input
             type="tel"
             value={contact.phone}
-            onChange={(e) => handleInputChange('phone', e.target.value)}
+            onChange={(e) => {
+              const numbersOnly = e.target.value.replace(/\D/g, '').slice(0, 20);
+              handleInputChange('phone', numbersOnly);
+            }}
             className={getInputClasses('phone')}
             placeholder="(555) 123-4567"
+            maxLength={20}
+            inputMode="numeric"
+            pattern="[0-9]*"
           />
           {getFieldError('phone') && (
             <p className="text-red-500 text-xs mt-1 flex items-center">
