@@ -1,35 +1,43 @@
+import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { clearForm } from '../features/form/formSlice';
+import { clearForm, validateForm } from '../features/form/formSlice';
 import { useCreateClientMutation } from '../services/petCareApi';
+import { useToast } from './customs/Toast/ToastProvider';
 
 const ActionButtons = () => {
   const dispatch = useDispatch();
-  const { formData, isLoading } = useSelector((state) => state.form);
+  const { formData, isLoading, validationErrors, isFormValid } = useSelector((state) => state.form);
   const [createClient, { isLoading: isCreating }] = useCreateClientMutation();
+  const { showSuccess, showError, showWarning } = useToast();
 
   const handleClearForm = () => {
     if (window.confirm('Are you sure you want to clear the form? This action cannot be undone.')) {
       dispatch(clearForm());
+      showSuccess('Form cleared successfully!');
     }
   };
 
   const handleSaveAsDraft = () => {
     // Save to localStorage as draft
     localStorage.setItem('petCareFormDraft', JSON.stringify(formData));
-    alert('Form saved as draft successfully!');
+    showSuccess('Form saved as draft successfully!');
   };
 
   const handlePreview = () => {
     // Open preview modal or navigate to preview page
     console.log('Preview form data:', formData);
-    alert('Preview functionality would open here');
+    showWarning('Preview functionality would open here');
   };
 
   const handleSaveClientRecord = async () => {
     try {
-      // Validate required fields
-      if (!formData.basic.fullName) {
-        alert('Please fill in the required fields');
+      // Validate form first
+      dispatch(validateForm());
+      
+      // Check if form is valid
+      if (!isFormValid) {
+        // const errorCount = Object.keys(validationErrors).length;
+        showError(`Please fill in the required fields to continue.`);
         return;
       }
 
@@ -53,11 +61,11 @@ const ActionButtons = () => {
       };
 
       await createClient(clientData).unwrap();
-      alert('Client record saved successfully!');
+      showSuccess('Client record saved successfully!');
       dispatch(clearForm());
     } catch (error) {
       console.error('Error saving client:', error);
-      alert('Error saving client record. Please try again.');
+      showError('Error saving client record. Please try again.');
     }
   };
 
