@@ -2,10 +2,10 @@ import { rtkQueryApi } from "../rtkQueryApi";
 
 export const petCareApi = rtkQueryApi.injectEndpoints({
     endpoints: (builder) => ({
-        // getClientById: builder.query({
-        //     query: (id) => `users/${id}`,
-        //     providesTags: ['Client'],
-        // }),
+        getClientById: builder.query({
+            query: (id) => `/b/${id}`,
+            providesTags: ['Client'],
+        }),
         createClient: builder.mutation({
             query: (clientData) => ({
                 url: '/b',
@@ -19,5 +19,6 @@ export const petCareApi = rtkQueryApi.injectEndpoints({
 });
 
 export const {
-    useCreateClientMutation
+    useCreateClientMutation,
+    useGetClientByIdQuery
 } = petCareApi;

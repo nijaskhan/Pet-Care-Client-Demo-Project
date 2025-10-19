@@ -3,8 +3,12 @@ import { updateFormData } from '../../features/form/formSlice';
 
 const Compliance = () => {
     const dispatch = useDispatch();
-    const { formData } = useSelector((state) => state.form);
+    const { formData, validationErrors } = useSelector((state) => state.form);
     const { compliance } = formData;
+
+    const getFieldError = (field) => {
+        return validationErrors[`compliance.${field}`];
+    };
 
     const handleInputChange = (field, value) => {
         dispatch(updateFormData({ section: 'compliance', field, value }));
@@ -24,7 +28,7 @@ const Compliance = () => {
             {/* Form Fields */}
             <div className="space-y-6">
                 {/* Terms and Conditions */}
-                <div className="bg-blue-50 rounded-lg p-6">
+                <div className={`bg-blue-50 rounded-lg p-6 ${getFieldError('termsAccepted') ? 'border-2 border-red-200' : ''}`}>
                     <label className="flex items-start space-x-3 cursor-pointer">
                         <input
                             type="checkbox"
@@ -39,12 +43,20 @@ const Compliance = () => {
                             <p className="text-xs text-gray-600 mt-1">
                                 By checking this box, you agree to our terms of service and client agreement.
                             </p>
+                            {getFieldError('termsAccepted') && (
+                                <p className="text-red-500 text-xs mt-2 flex items-center">
+                                    <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                                    </svg>
+                                    {getFieldError('termsAccepted')}
+                                </p>
+                            )}
                         </div>
                     </label>
                 </div>
 
                 {/* Privacy Policy */}
-                <div className="bg-green-50 rounded-lg p-6">
+                <div className={`bg-green-50 rounded-lg p-6 ${getFieldError('privacyPolicyAccepted') ? 'border-2 border-red-200' : ''}`}>
                     <label className="flex items-start space-x-3 cursor-pointer">
                         <input
                             type="checkbox"
@@ -59,6 +71,14 @@ const Compliance = () => {
                             <p className="text-xs text-gray-600 mt-1">
                                 You consent to the collection, use, and storage of your personal information as described in our privacy policy.
                             </p>
+                            {getFieldError('privacyPolicyAccepted') && (
+                                <p className="text-red-500 text-xs mt-2 flex items-center">
+                                    <svg className="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                                    </svg>
+                                    {getFieldError('privacyPolicyAccepted')}
+                                </p>
+                            )}
                         </div>
                     </label>
                 </div>

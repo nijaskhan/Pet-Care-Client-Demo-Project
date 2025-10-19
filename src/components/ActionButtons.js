@@ -1,5 +1,6 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { clearForm, validateForm } from '../features/form/formSlice';
 import { useToast } from './customs/Toast/ToastProvider';
 import Swal from 'sweetalert2';
@@ -7,6 +8,7 @@ import { useCreateClientMutation } from '../services/api/petCareApi';
 
 const ActionButtons = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { formData, isLoading, validationErrors, isFormValid } = useSelector((state) => state.form);
   const { showSuccess, showError, showWarning } = useToast();
   const [createClient, { isLoading: isCreating }] = useCreateClientMutation();
@@ -37,42 +39,133 @@ const ActionButtons = () => {
     showSuccess('Form saved as draft successfully!');
   };
 
-  const handlePreview = () => {
-    // Open preview modal or navigate to preview page
-    console.log('Preview form data:', formData);
-    showWarning('Preview functionality would open here');
+  const handlePreview = (clientId) => {
+    if (clientId) {
+      navigate(`/preview/${clientId}`);
+    } else {
+      showWarning('No client ID available for preview');
+    }
+  };
+
+  // Synchronous validation function
+  const validateFormSync = (formData) => {
+    const errors = {};
+    
+    // Required fields validation
+    if (!formData.basic.fullName.trim()) {
+      errors['basic.fullName'] = 'Full name is required';
+    }
+    
+    if (!formData.contact.email.trim()) {
+      errors['contact.email'] = 'Email is required';
+    } else if (!/\S+@\S+\.\S+/.test(formData.contact.email)) {
+      errors['contact.email'] = 'Please enter a valid email';
+    }
+    
+    if (!formData.contact.phone.trim()) {
+      errors['contact.phone'] = 'Phone number is required';
+    }
+    
+    if (!formData.pets.emergencyContact.name.trim()) {
+      errors['pets.emergencyContact.name'] = 'Emergency contact name is required';
+    }
+    
+    if (!formData.pets.emergencyContact.phone.trim()) {
+      errors['pets.emergencyContact.phone'] = 'Emergency contact phone is required';
+    }
+    
+    if (!formData.compliance.termsAccepted) {
+      errors['compliance.termsAccepted'] = 'You must accept the terms and conditions';
+    }
+    
+    if (!formData.compliance.privacyPolicyAccepted) {
+      errors['compliance.privacyPolicyAccepted'] = 'You must accept the privacy policy';
+    }
+    
+    return {
+      errors,
+      isValid: Object.keys(errors).length === 0
+    };
   };
 
   const handleSaveClientRecord = async () => {
     try {
-      dispatch(validateForm());
-
-      if (!isFormValid) {
-        // const errorCount = Object.keys(validationErrors).length;
-        showError(`Please fill in the required fields to continue.`);
+      // Validate form synchronously
+      const validation = validateFormSync(formData);
+      
+      if (!validation.isValid) {
+        // Dispatch validation to update the store with errors
+        dispatch(validateForm());
+        const errorCount = Object.keys(validation.errors).length;
+        showError(`Please fill in the required fields to continue. ${errorCount} field(s) need attention.`);
         return;
       }
 
       const clientData = {
-        name: formData.basic.fullName,
-        username: formData.basic.preferredName || formData.basic.fullName,
-        email: formData.contact.email,
-        phone: formData.contact.phone,
-        website: 'petcare.com',
-        address: {
-          street: formData.contact.address,
+        basic: {
+          clientId: formData.basic.clientId,
+          fullName: formData.basic.fullName,
+          preferredName: formData.basic.preferredName,
+          gender: formData.basic.gender,
+          dateOfBirth: formData.basic.dateOfBirth,
+          profilePicture: formData.basic.profilePicture || null,
+        },
+        contact: {
+          email: formData.contact.email,
+          phone: formData.contact.phone,
+          address: formData.contact.address,
           city: formData.contact.city,
-          zipcode: formData.contact.zipCode,
+          state: formData.contact.state,
+          zipCode: formData.contact.zipCode,
+          country: formData.contact.country,
         },
-        company: {
-          name: 'Pet Care Services',
-          catchPhrase: 'Caring for your pets',
-          bs: 'pet-care-services',
+        pets: {
+          pets: formData.pets.pets || [],
+          emergencyContact: {
+            name: formData.pets.emergencyContact?.name,
+            relationship: formData.pets.emergencyContact?.relationship,
+            phone: formData.pets.emergencyContact?.phone,
+            email: formData.pets.emergencyContact?.email,
+          }
         },
+        services: {
+          serviceTypes: formData.services.serviceTypes || [],
+          preferences: formData.services.preferences,
+          specialInstructions: formData.services.specialInstructions,
+        },
+        billing: {
+          paymentMethod: formData.billing.paymentMethod,
+          billingAddress: formData.billing.billingAddress,
+          taxId: formData.billing.taxId,
+          notes: formData.billing.notes,
+        },
+        preferences: {
+          communicationMethod: formData.preferences.communicationMethod,
+          language: formData.preferences.language,
+          timezone: formData.preferences.timezone,
+          notifications: {
+            email: !!formData.preferences.notifications?.email,
+            sms: !!formData.preferences.notifications?.sms,
+            push: !!formData.preferences.notifications?.push
+          }
+        },
+        compliance: {
+          termsAccepted: !!formData.compliance.termsAccepted,
+          privacyPolicyAccepted: !!formData.compliance.privacyPolicyAccepted,
+          marketingConsent: !!formData.compliance.marketingConsent,
+          dataRetention: formData.compliance.dataRetention,
+        }
       };
 
       try {
-        await createClient(clientData).unwrap();
+        const result = await createClient(clientData).unwrap();
+
+        // Extract the bin ID from the JSONBin response structure
+        const clientId = result?.metadata?.id;
+
+        // Debug logging
+        console.log('API Response:', result);
+        console.log('Extracted Client ID:', clientId);
 
         Swal.fire({
           title: "Record Added!",
@@ -85,9 +178,9 @@ const ActionButtons = () => {
           confirmButtonColor: "#3b82f6",
           cancelButtonColor: "#6b7280",
           draggable: true
-        }).then((result) => {
-          if (result.isConfirmed) {
-            handlePreview();
+        }).then((swalResult) => {
+          if (swalResult.isConfirmed) {
+            handlePreview(clientId);
           }
         });
 
@@ -129,7 +222,7 @@ const ActionButtons = () => {
         SAVE AS DRAFT
       </button>
 
-      <button
+      {/* <button
         onClick={handlePreview}
         className="flex items-center px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors duration-200 font-medium"
       >
@@ -138,7 +231,7 @@ const ActionButtons = () => {
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
         </svg>
         PREVIEW
-      </button>
+      </button> */}
 
       <button
         onClick={handleSaveClientRecord}
