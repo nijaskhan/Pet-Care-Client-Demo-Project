@@ -1,5 +1,3 @@
-import React from 'react';
-
 const TabNavigation = ({ tabs, activeTab, onTabChange }) => {
   return (
     <div className="bg-white border-b border-gray-200">
@@ -10,7 +8,7 @@ const TabNavigation = ({ tabs, activeTab, onTabChange }) => {
             onClick={() => onTabChange(tab.id)}
             className={`px-6 py-4 text-sm font-medium transition-all duration-200 ${
               activeTab === tab.id
-                ? 'bg-blue-600 text-white border-b-2 border-green-400'
+                ? 'bg-blue-500 text-white border-b-2 border-green-400'
                 : 'text-gray-600 hover:text-gray-800 hover:bg-gray-50'
             }`}
           >

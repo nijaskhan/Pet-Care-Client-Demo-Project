@@ -1,8 +1,6 @@
-import React from 'react';
-
 const Header = () => {
   return (
-    <header className="bg-gradient-to-r from-blue-600 to-blue-700 text-white py-8 px-8 rounded-t-2xl mb-0">
+    <header className="bg-gradient-to-r from-blue-500 to-blue-500 text-white py-8 px-8 rounded-2xl mb-0">
       <div className="flex items-center justify-center">
         {/* Paw Print Logo */}
         <div className="flex flex-col mr-6">

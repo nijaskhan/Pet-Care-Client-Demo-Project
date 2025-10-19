@@ -1,4 +1,3 @@
-import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { setActiveTab } from '../features/form/formSlice';
 import Header from './Header';
@@ -11,6 +10,7 @@ import Billing from './sections/Billing';
 import Preferences from './sections/Preferences';
 import Compliance from './sections/Compliance';
 import ActionButtons from './ActionButtons';
+import SessionDivider from './customs/SessionDivider';
 
 const PetCareForm = () => {
   const dispatch = useDispatch();
@@ -53,20 +53,25 @@ const PetCareForm = () => {
         <div className="max-w-6xl mx-auto">
           {/* Header */}
           <Header />
-          
+
+          {/* Responsive Session Divider */}
+          <SessionDivider
+            height='1rem'
+          />
+
           {/* Main Form Container */}
           <div className="bg-white rounded-2xl shadow-2xl overflow-hidden">
             {/* Tab Navigation */}
-            <TabNavigation 
-              tabs={tabs} 
-              activeTab={activeTab} 
-              onTabChange={(tabId) => dispatch(setActiveTab(tabId))} 
+            <TabNavigation
+              tabs={tabs}
+              activeTab={activeTab}
+              onTabChange={(tabId) => dispatch(setActiveTab(tabId))}
             />
-            
+
             {/* Form Content */}
             <div className="p-8">
               {renderActiveSection()}
-              
+
               {/* Action Buttons */}
               <ActionButtons />
             </div>
