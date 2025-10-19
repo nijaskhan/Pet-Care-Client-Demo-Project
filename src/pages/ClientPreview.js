@@ -375,19 +375,19 @@ const ClientPreview = () => {
                 <div className="px-4 py-3 bg-gray-50 rounded-lg border border-gray-200">
                   <div className="space-y-1">
                     <div className="flex items-center">
-                      <span className="text-sm">Email: </span>
+                      <span className="text-sm mr-2">Email: </span>
                       <span className={`text-sm font-medium ${preferencesInfo?.notifications?.email ? 'text-green-600' : 'text-red-600'}`}>
                         {preferencesInfo?.notifications?.email ? 'Enabled' : 'Disabled'}
                       </span>
                     </div>
                     <div className="flex items-center">
-                      <span className="text-sm">SMS: </span>
+                      <span className="text-sm mr-2">SMS: </span>
                       <span className={`text-sm font-medium ${preferencesInfo?.notifications?.sms ? 'text-green-600' : 'text-red-600'}`}>
                         {preferencesInfo?.notifications?.sms ? 'Enabled' : 'Disabled'}
                       </span>
                     </div>
                     <div className="flex items-center">
-                      <span className="text-sm">Push: </span>
+                      <span className="text-sm mr-2">Push: </span>
                       <span className={`text-sm font-medium ${preferencesInfo?.notifications?.push ? 'text-green-600' : 'text-red-600'}`}>
                         {preferencesInfo?.notifications?.push ? 'Enabled' : 'Disabled'}
                       </span>
